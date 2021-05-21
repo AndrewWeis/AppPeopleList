@@ -1,6 +1,8 @@
-package com.example.simplelist.data
+package com.example.simplelist.repository
 
 import androidx.lifecycle.LiveData
+import com.example.simplelist.data.UserDao
+import com.example.simplelist.model.User
 
 class UserRepository(private val userDao: UserDao) {
 
@@ -8,5 +10,9 @@ class UserRepository(private val userDao: UserDao) {
 
     suspend fun addUser(user: User) {
         userDao.addUser(user)
+    }
+
+    suspend fun updateUser(user: User) {
+        userDao.updateUser(user)
     }
 }
