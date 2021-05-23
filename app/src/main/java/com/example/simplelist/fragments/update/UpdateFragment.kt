@@ -1,22 +1,21 @@
 package com.example.simplelist.fragments.update
 
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.view.*
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.core.view.drawToBitmap
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
 import com.example.simplelist.R
 import com.example.simplelist.model.User
 import com.example.simplelist.viewmodel.UserViewModel
@@ -29,6 +28,7 @@ class UpdateFragment : Fragment() {
     private val args by navArgs<UpdateFragmentArgs>()
 
     private lateinit var mUserViewModel: UserViewModel
+    private lateinit var updateProfileImg: ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,9 +37,12 @@ class UpdateFragment : Fragment() {
 
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
+        updateProfileImg = view.findViewById(R.id.updateProfileImg_et)
+
         view.updateFirstName_et.setText(args.currentUser.firstName)
         view.updateLastName_et.setText(args.currentUser.lastName)
         view.updateAge_et.setText(args.currentUser.age.toString())
+        view.updateProfileImg_et.setImageBitmap(args.currentUser.profilePhoto)
 
         view.update_btn.setOnClickListener {
             updateItem()
@@ -57,10 +60,9 @@ class UpdateFragment : Fragment() {
         val age = Integer.parseInt(updateAge_et.text.toString())
 
         if (inputCheck(firstName, lastName, updateAge_et.text)) {
+
             lifecycleScope.launch {
-                // Create user object
-                val updateUser = User(args.currentUser.id, firstName, lastName, age, getBitmap())
-                // Update current user
+                val updateUser = User(args.currentUser.id, firstName, lastName, age, updateProfileImg.drawToBitmap())
                 mUserViewModel.updateUser(updateUser)
             }
 
@@ -70,16 +72,6 @@ class UpdateFragment : Fragment() {
         } else {
             Toast.makeText(requireContext(), "Please, fill out all fields.", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private suspend fun getBitmap(): Bitmap {
-        val loading = ImageLoader(requireActivity())
-        val request = ImageRequest.Builder(requireActivity())
-            .data("https://avatars3.githubusercontent.com/u/14994036?s=400&u=2832879700f03d4b37ae1c09645352a352b9d2d0&v=4")
-            .build()
-
-        val result = (loading.execute(request) as SuccessResult).drawable
-        return (result as BitmapDrawable).bitmap
     }
 
     private fun inputCheck(firstName: String, lastName: String, age: Editable): Boolean {

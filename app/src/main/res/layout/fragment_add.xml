@@ -8,10 +8,11 @@
     tools:context=".fragments.add.AddFragment">
 
     <ImageView
-        android:id="@+id/updateProfileImg_et"
+        android:id="@+id/addProfileImg_et"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/img_template_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateProfileImg_et" />
+        app:layout_constraintTop_toBottomOf="@+id/addProfileImg_et" />
 
     <EditText
         android:id="@+id/addLastName_et"
@@ -66,4 +67,17 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addAge_et" />
+
+    <ImageButton
+        android:id="@+id/add_img_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="128dp"
+        android:background="@drawable/btn_add_style"
+        android:backgroundTint="@color/teal_200"
+        android:src="@drawable/ic_add"
+        android:tint="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/addProfileImg_et"
+        app:layout_constraintTop_toTopOf="@+id/addProfileImg_et" />
 </androidx.constraintlayout.widget.ConstraintLayout>

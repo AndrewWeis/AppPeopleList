@@ -1,7 +1,7 @@
 package com.example.simplelist.fragments.add
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -9,13 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.drawToBitmap
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
 import com.example.simplelist.R
 import com.example.simplelist.model.User
 import com.example.simplelist.viewmodel.UserViewModel
@@ -27,6 +26,12 @@ class AddFragment : Fragment() {
 
     private lateinit var mUserViewModel: UserViewModel
 
+    private lateinit var addProfileImg: ImageView
+
+    companion object {
+        val IMAGE_REQUEST_CODE = 100
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +40,12 @@ class AddFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
 
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        addProfileImg = view.findViewById(R.id.addProfileImg_et)
+
+        view.add_img_btn.setOnClickListener {
+            imageFromGallery()
+        }
 
         view.add_btn.setOnClickListener {
             insertDataToDatabase()
@@ -49,10 +60,9 @@ class AddFragment : Fragment() {
         val age = addAge_et.text
 
         if (inputCheck(firstName, lastName, age)) {
-            // Create User Object
+
             lifecycleScope.launch {
-                val user = User(0, firstName, lastName, Integer.parseInt(age.toString()), getBitmap())
-                // Add Data to Database
+                val user = User(0, firstName, lastName, Integer.parseInt(age.toString()), addProfileImg.drawToBitmap())
                 mUserViewModel.addUser(user)
             }
 
@@ -65,17 +75,20 @@ class AddFragment : Fragment() {
         }
     }
 
-    private suspend fun getBitmap(): Bitmap {
-        val loading = ImageLoader(requireContext())
-        val request = ImageRequest.Builder(requireContext())
-            .data("https://avatars3.githubusercontent.com/u/14994036?s=400&u=2832879700f03d4b37ae1c09645352a352b9d2d0&v=4")
-            .build()
-
-        val result = (loading.execute(request) as SuccessResult).drawable
-        return (result as BitmapDrawable).bitmap
-    }
-
     private fun inputCheck(firstName: String, lastName: String, age: Editable): Boolean {
         return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
+    }
+
+    private fun imageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
+            addProfileImg.setImageURI(data?.data)
+        }
     }
 }
