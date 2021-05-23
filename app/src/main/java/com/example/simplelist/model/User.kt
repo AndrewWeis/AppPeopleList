@@ -1,5 +1,6 @@
 package com.example.simplelist.model
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -12,5 +13,6 @@ data class User(
     val id: Int,
     val firstName: String,
     val lastName: String,
-    val age: Int
+    val age: Int,
+    val profilePhoto: Bitmap
 ) : Parcelable
