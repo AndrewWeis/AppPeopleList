@@ -3,8 +3,10 @@ package com.example.simplelist.repository
 import androidx.lifecycle.LiveData
 import com.example.simplelist.data.UserDao
 import com.example.simplelist.model.User
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class UserRepository(private val userDao: UserDao) {
+class UserRepository @Inject constructor (private val userDao: UserDao) {
 
     val readAllData: LiveData<List<User>> = userDao.readAllData()
 
@@ -22,5 +24,9 @@ class UserRepository(private val userDao: UserDao) {
 
     suspend fun deleteAllUsers() {
         userDao.deleteAllUsers()
+    }
+
+    fun searchDataBase(searchQuery: String): Flow<List<User>> {
+        return userDao.searchDatabase(searchQuery)
     }
 }
