@@ -25,22 +25,16 @@ import kotlinx.coroutines.launch
 class AddFragment : Fragment() {
 
     private lateinit var mUserViewModel: UserViewModel
-
     private lateinit var addProfileImg: ImageView
 
     companion object {
-        val IMAGE_REQUEST_CODE = 100
+        const val IMAGE_REQUEST_CODE = 100
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
 
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
         addProfileImg = view.findViewById(R.id.addProfileImg_et)
 
         view.add_img_btn.setOnClickListener {
@@ -60,14 +54,11 @@ class AddFragment : Fragment() {
         val age = addAge_et.text
 
         if (inputCheck(firstName, lastName, age)) {
-
             lifecycleScope.launch {
                 val user = User(0, firstName, lastName, Integer.parseInt(age.toString()), addProfileImg.drawToBitmap())
                 mUserViewModel.addUser(user)
             }
-
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
-
             // Navigate back
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
         } else {

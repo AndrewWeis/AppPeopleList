@@ -2,10 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+   <item android:id="@+id/menu_search"
+       android:title="@string/search"
+       android:icon="@drawable/ic_search"
+       android:iconTint="@color/white"
+       app:showAsAction="ifRoom"
+       app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+
    <item android:id="@+id/menu_delete"
        android:title="@string/delete_all"
        android:icon="@drawable/ic_delete"
        android:iconTint="@color/white"
-       app:showAsAction="ifRoom"/>
+       app:showAsAction="never"/>
 
 </menu>

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE) // if there are new exactly the same user then we ignore that
-    suspend fun addUser(user: User) // suspend because we're going to use coroutines later
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addUser(user: User)
 
     @Update
     suspend fun updateUser(user: User)

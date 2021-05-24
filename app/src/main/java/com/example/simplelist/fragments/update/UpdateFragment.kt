@@ -1,9 +1,6 @@
 package com.example.simplelist.fragments.update
 
-import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -60,12 +57,10 @@ class UpdateFragment : Fragment() {
         val age = Integer.parseInt(updateAge_et.text.toString())
 
         if (inputCheck(firstName, lastName, updateAge_et.text)) {
-
             lifecycleScope.launch {
                 val updateUser = User(args.currentUser.id, firstName, lastName, age, updateProfileImg.drawToBitmap())
                 mUserViewModel.updateUser(updateUser)
             }
-
             Toast.makeText(requireContext(), "Updated successfully!", Toast.LENGTH_SHORT).show()
             // Navigate back
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
